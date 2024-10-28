@@ -1,9 +1,15 @@
 package com.example.navigation_smd_7a;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -11,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -21,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
     ViewPagerAdapter adapter;
     int count=0;
     boolean flag = false;
+
+    FloatingActionButton fab_add;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +45,47 @@ public class MainActivity extends AppCompatActivity {
         vp2 = findViewById(R.id.viewpager2);
         vp2.setAdapter(adapter);
         tabLayout = findViewById(R.id.tabLayout);
+        fab_add = findViewById(R.id.fab_add);
+
+        fab_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                dialog.setTitle("Product");
+                View v = LayoutInflater.from(MainActivity.this)
+                        .inflate(R.layout.add_new_product_dialog_design, null, false);
+                dialog.setView(v);
+                EditText etTitle = v.findViewById(R.id.etTitle);
+                EditText etDate = v.findViewById(R.id.etDate);
+                EditText etPrice = v.findViewById(R.id.etPrice);
+
+                dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String title = etTitle.getText().toString().trim();
+                        String date = etDate.getText().toString().trim();
+                        String price = etPrice.getText().toString();
+
+                        ProductDB productDB = new ProductDB(MainActivity.this);
+                        productDB.open();
+                        productDB.insert(title, date, Integer.parseInt(price));
+                        productDB.close();
+                        Toast.makeText(MainActivity.this, "Product Added", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+
+            }
+        });
+
 
         TabLayoutMediator tabLayoutMediator =
                 new TabLayoutMediator(tabLayout, vp2, new TabLayoutMediator.TabConfigurationStrategy() {

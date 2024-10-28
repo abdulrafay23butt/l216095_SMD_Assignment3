@@ -6,12 +6,12 @@
     tools:context=".NewOrderFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:textSize="20sp"
-        android:text="New Orders"
+        android:id="@+id/lvNewOrdersList"
         />
 
 </FrameLayout>
