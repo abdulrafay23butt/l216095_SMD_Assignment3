@@ -2,19 +2,27 @@ package com.example.navigation_smd_7a;
 
 public class Product {
     int id;
-    String title, date;
+    String title;
     int price;
     String status;
-
+    String date;
     public Product() {
     }
 
     public Product(int id, String title, String date, int price, String status) {
         this.id = id;
         this.title = title;
-        this.date = date;
         this.price = price;
         this.status = status;
+        this.date=date;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public int getId() {
@@ -33,13 +41,7 @@ public class Product {
         this.title = title;
     }
 
-    public String getDate() {
-        return date;
-    }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
 
     public int getPrice() {
         return price;

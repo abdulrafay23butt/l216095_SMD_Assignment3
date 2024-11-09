@@ -12,12 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:gravity="center"
-        android:text="New Product"
+        android:text="@string/new_product"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/tvHeading"
+        />
 
     <EditText
         android:id="@+id/etTitle"
@@ -26,20 +24,20 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:ems="10"
         android:hint="Enter Title"
         android:inputType="text" />
+
 
     <EditText
         android:id="@+id/etDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="DD/MM/YYYY"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:ems="10"
-        android:hint="Date"
-        android:inputType="date" />
+        />
+
 
     <EditText
         android:id="@+id/etPrice"
@@ -48,7 +46,6 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:ems="10"
         android:hint="Price"
         android:inputType="numberSigned" />
 

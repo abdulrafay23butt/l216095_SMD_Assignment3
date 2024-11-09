@@ -1,16 +1,22 @@
 package com.example.navigation_smd_7a;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -81,12 +87,63 @@ public class NewOrderFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ListView lvNewOrderList = view.findViewById(R.id.lvNewOrdersList);
+        FloatingActionButton fab = view.findViewById(R.id.fab_add);
+
         ProductDB productDB = new ProductDB(context);
         productDB.open();
-        ArrayList<Product> products = productDB.fetchProducts();
+        ArrayList<Product> products = productDB.fetchNewProducts();
         productDB.close();
 
         ProductAdapter adapter = new ProductAdapter(context, R.layout.product_item_design, products);
         lvNewOrderList.setAdapter(adapter);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+                View v = LayoutInflater.from(context).inflate(R.layout.add_new_product_dialog_design, null, false);
+                dialog.setView(v);
+
+                EditText etTitle = v.findViewById(R.id.etTitle);
+                EditText etPrice = v.findViewById(R.id.etPrice);
+
+                dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String title = etTitle.getText().toString().trim();
+                        String price = etPrice.getText().toString();
+
+                        if (!title.isEmpty() && !price.isEmpty()) {
+                            try {
+                                int priceValue = Integer.parseInt(price);
+                                ProductDB productDB = new ProductDB(context);
+                                productDB.open();
+                                productDB.insert(title, priceValue);
+                                products.clear();
+                                products.addAll(productDB.fetchNewProducts());
+                                productDB.close();
+
+                                adapter.notifyDataSetChanged();  // Notify adapter of changes
+                                Toast.makeText(context, "Product Added", Toast.LENGTH_SHORT).show();
+                            } catch (NumberFormatException e) {
+                                Toast.makeText(context, "Invalid price", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(context, "Title or price cannot be empty", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Dismiss dialog
+                    }
+                });
+
+                dialog.show();
+            }
+        });
     }
+
 }
